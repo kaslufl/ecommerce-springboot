@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "9143a282-cf1b-4fc3-8d77-df5693e05420",
+		"name": "ecommerce-springboot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Get Produto by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url_server}}/produto/:id",
+							"protocol": "http",
+							"host": [
+								"{{url_server}}"
+							],
+							"path": [
+								"produto",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Produto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url_server}}/produto?nome=Refrigereco&valorMinimo=2&valorMaximo=6",
+							"protocol": "http",
+							"host": [
+								"{{url_server}}"
+							],
+							"path": [
+								"produto"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "Refrigereco",
+									"description": "string"
+								},
+								{
+									"key": "valorMinimo",
+									"value": "2",
+									"description": "float"
+								},
+								{
+									"key": "valorMaximo",
+									"value": "6",
+									"description": "float"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Produto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Refrigereco\",\r\n    \"descricao\": \"Refrigereco de qualidade 500ml\",\r\n    \"valorUnitario\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url_server}}/produto",
+							"protocol": "http",
+							"host": [
+								"{{url_server}}"
+							],
+							"path": [
+								"produto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categoria",
+			"item": [
+				{
+					"name": "Get Categoria Produtos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url_server}}/categoria/:categoriaId/produto",
+							"protocol": "http",
+							"host": [
+								"{{url_server}}"
+							],
+							"path": [
+								"categoria",
+								":categoriaId",
+								"produto"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "Refrigereco",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "valorMinimo",
+									"value": "1",
+									"description": "float",
+									"disabled": true
+								},
+								{
+									"key": "valorMaximo",
+									"value": "3",
+									"description": "float",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "categoriaId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
