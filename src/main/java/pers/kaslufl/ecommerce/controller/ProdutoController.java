@@ -57,7 +57,6 @@ public class ProdutoController {
             throw new ProdutoBadRequestException();
         }
         if ((nome != null) && ((valorMinimo == null) || (valorMaximo == null))){
-            System.out.println("Koe");
             return produtoRepository.search(nome);
         }
         if ((nome == null) && ((valorMinimo != null) && (valorMaximo != null))){

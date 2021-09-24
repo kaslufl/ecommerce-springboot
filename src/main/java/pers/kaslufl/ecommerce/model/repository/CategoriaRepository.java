@@ -30,7 +30,7 @@ public class CategoriaRepository {
 
     public List<Produto> searchProducts(int id) {
         return jdbcTemplate.query(
-                "select * from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
+                "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ?",
                 new ProdutoMapper(),
                 id
@@ -39,7 +39,7 @@ public class CategoriaRepository {
 
     public List<Produto> searchProducts(int id, String nome) {
         return jdbcTemplate.query(
-                "select * from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
+                "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome = ?",
                 new ProdutoMapper(),
                 id,
@@ -49,7 +49,7 @@ public class CategoriaRepository {
 
     public List<Produto> searchProducts(int id, Float valorMinimo, Float valorMaximo) {
         return jdbcTemplate.query(
-                "select * from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
+                "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ? " +
                         "and p.valorunitario between ? and ?",
                 new ProdutoMapper(),
@@ -61,7 +61,7 @@ public class CategoriaRepository {
 
     public List<Produto> searchProducts(int id, String nome, Float valorMinimo, Float valorMaximo) {
         return jdbcTemplate.query(
-                "select * from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
+                "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome = ?" +
                         "and p.valorunitario between ? and ?",
                 new ProdutoMapper(),
