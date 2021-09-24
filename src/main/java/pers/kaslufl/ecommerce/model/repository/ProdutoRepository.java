@@ -1,8 +1,12 @@
 package pers.kaslufl.ecommerce.model.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import pers.kaslufl.ecommerce.model.entity.Categoria;
 import pers.kaslufl.ecommerce.model.entity.Produto;
+import pers.kaslufl.ecommerce.model.entity.Promocao;
+import pers.kaslufl.ecommerce.model.entity.PromocaoItem;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ProdutoRepository {
@@ -19,12 +23,39 @@ public class ProdutoRepository {
         );
     }
 
-    public Produto search(int id) {
-        return jdbcTemplate.queryForObject(
+    public HashMap search(int id) {
+        Produto produto = jdbcTemplate.queryForObject(
                 "select * from produto where id = ?",
                 new ProdutoMapper(),
                 id
         );
+        List<Categoria> categoria = jdbcTemplate.query(
+                "select c.* from categoria c inner join categoriaProduto cp on c.id = cp.categoriaid " +
+                        "inner join produto p on p.id = cp.produtoid where p.id = ?",
+                new CategoriaMapper(),
+                id
+        );
+
+        List<Promocao> promocao = jdbcTemplate.query(
+                "select pr.* from promocao pr inner join promocaoItem pi on pi.promocaoId = pr.id " +
+                        "inner join produto p on p.id = pi.produtoId where p.id = ?",
+                new PromocaoMapper(),
+                id
+        );
+
+        List<PromocaoItem> promocaoitem = jdbcTemplate.query(
+                "select pi.* from promocaoItem pi inner join produto p on p.id = pi.produtoid where p.id = ?",
+                new PromocaoItemMapper(),
+                id
+        );
+
+        HashMap json = new HashMap();
+        json.put("Produto", produto);
+        json.put("Categoria", categoria);
+        json.put("Promocao", promocao);
+        json.put("PromocaoItem", promocaoitem);
+
+        return json;
     }
 
     public List<Produto> search (String nome) {

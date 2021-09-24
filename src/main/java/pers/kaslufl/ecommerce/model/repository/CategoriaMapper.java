@@ -14,7 +14,7 @@ public class CategoriaMapper implements RowMapper<Categoria> {
         categoria.setId(resultSet.getInt("id"));
         categoria.setNome(resultSet.getString("nome"));
         categoria.setDescricao(resultSet.getString("descricao"));
-        categoria.setImagemSimboloUrl(resultSet.getString("imagemsimbulourl"));
+        categoria.setImagemSimboloUrl(resultSet.getString("imagemSimboloUrl"));
 
         return categoria;
     }

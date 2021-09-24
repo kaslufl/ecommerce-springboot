@@ -11,6 +11,7 @@ import pers.kaslufl.ecommerce.model.repository.ProdutoNotFoundException;
 import pers.kaslufl.ecommerce.model.repository.ProdutoRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public Produto search(@PathVariable int id) {
+    public HashMap search(@PathVariable int id) {
         try {
             return produtoRepository.search(id);
         }
