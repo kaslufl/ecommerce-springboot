@@ -30,7 +30,8 @@ public class ProdutoRepository {
     public List<Produto> search (String nome) {
         return jdbcTemplate.query(
                 "select * from produto where nome = ?",
-                new ProdutoMapper()
+                new ProdutoMapper(),
+                nome
         );
     }
 
@@ -45,7 +46,7 @@ public class ProdutoRepository {
 
     public List<Produto> search (String nome, Float valorMinimo, Float valorMaximo) {
         return jdbcTemplate.query(
-                "select * from produto where nome = ? and valorunitario between ? and ?",
+                "select * from produto where nome = ? and valorUnitario between ? and ?",
                 new ProdutoMapper(),
                 nome,
                 valorMinimo,
@@ -55,8 +56,8 @@ public class ProdutoRepository {
 
     public Produto create(Produto produto) throws Exception {
         int insert = jdbcTemplate.update(
-            "insert into produto(nome, descricao, fotourl, datacadastro, dataultimaautalizacao, valorunitario)" +
-                    " values (?, ?, ?, ?, ?, ?, ?)",
+            "insert into produto(nome, descricao, fotoUrl, dataCadastro, dataUltimaAtualizacao, valorUnitario)" +
+                    " values (?, ?, ?, ?, ?, ?)",
                 produto.getNome(),
                 produto.getDescricao(),
                 produto.getFotoUrl(),
@@ -65,6 +66,11 @@ public class ProdutoRepository {
                 produto.getValorUnitario()
         );
         if( insert == 1 ) {
+            int id = jdbcTemplate.queryForObject(
+                    "select max(id) from produto",
+                    Integer.class
+            );
+            produto.setId(id);
             return produto;
         }
         throw new Exception("Produto não foi cadastrado!");
@@ -72,8 +78,8 @@ public class ProdutoRepository {
 
     public Produto update(Produto produto) {
         int update = jdbcTemplate.update(
-                "update produto set nome = ?, descricao = ?, fotourl = ?, datacadastro = ?, " +
-                        "dataultimaautalizacao = ?, valorunitario = ? where id = ?",
+                "update produto set nome = ?, descricao = ?, fotourl = ?, dataCadastro = ?, " +
+                        "dataUltimaAtualizacao = ?, valorUnitario = ? where id = ?",
                 produto.getNome(),
                 produto.getDescricao(),
                 produto.getFotoUrl(),

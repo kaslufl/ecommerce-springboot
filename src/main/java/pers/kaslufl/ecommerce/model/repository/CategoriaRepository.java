@@ -80,6 +80,11 @@ public class CategoriaRepository {
                 categoria.getImagemSimboloUrl()
         );
         if( insert == 1 ) {
+            int id = jdbcTemplate.queryForObject(
+                    "select max(id) from categoria",
+                    Integer.class
+            );
+            categoria.setId(id);
             return categoria;
         }
         throw new Exception("Categoria não foi cadastrada!");
