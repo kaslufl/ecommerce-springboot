@@ -1,5 +1,6 @@
 package pers.kaslufl.ecommerce.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,10 +26,15 @@ public class ProdutoController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Produto create(@RequestBody Produto produto) throws Exception {
-        produto.setDataCadastro(LocalDateTime.now());
-        produto.setDataUltimaAtualizacao(LocalDateTime.now());
+        try {
+            produto.setDataCadastro(LocalDateTime.now());
+            produto.setDataUltimaAtualizacao(LocalDateTime.now());
 
-        return produtoRepository.create(produto);
+            return produtoRepository.create(produto);
+        }
+        catch (DataIntegrityViolationException e){
+            throw new ProdutoBadRequestException();
+        }
     }
 
     @GetMapping("/{id}")
