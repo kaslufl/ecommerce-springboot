@@ -1,10 +1,12 @@
 package pers.kaslufl.ecommerce.controller;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import pers.kaslufl.ecommerce.model.entity.Produto;
 import pers.kaslufl.ecommerce.model.repository.ProdutoBadRequestException;
+import pers.kaslufl.ecommerce.model.repository.ProdutoNotFoundException;
 import pers.kaslufl.ecommerce.model.repository.ProdutoRepository;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,16 @@ public class ProdutoController {
         produto.setDataUltimaAtualizacao(LocalDateTime.now());
 
         return produtoRepository.create(produto);
+    }
+
+    @GetMapping("/{id}")
+    public Produto search(@PathVariable int id) {
+        try {
+            return produtoRepository.search(id);
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new ProdutoNotFoundException();
+        }
     }
 
     @GetMapping
