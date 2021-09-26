@@ -40,10 +40,10 @@ public class CategoriaRepository {
     public List<Produto> searchProducts(int id, String nome) {
         return jdbcTemplate.query(
                 "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
-                        "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome = ?",
+                        "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome like ?",
                 new ProdutoMapper(),
                 id,
-                nome
+                "%" + nome + "%"
         );
     }
 
@@ -62,11 +62,11 @@ public class CategoriaRepository {
     public List<Produto> searchProducts(int id, String nome, Float valorMinimo, Float valorMaximo) {
         return jdbcTemplate.query(
                 "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
-                        "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome = ?" +
+                        "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome like ?" +
                         "and p.valorunitario between ? and ?",
                 new ProdutoMapper(),
                 id,
-                nome,
+                "%" + nome + "%",
                 valorMinimo,
                 valorMaximo
         );

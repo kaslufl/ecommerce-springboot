@@ -1,6 +1,7 @@
 package pers.kaslufl.ecommerce.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Produto {
     private Integer id;
@@ -10,6 +11,9 @@ public class Produto {
     private LocalDateTime dataCadastro;
     private LocalDateTime dataUltimaAtualizacao;
     private Float valorUnitario;
+    private List<Categoria> categoriaList;
+    private List<Promocao> promocaoList;
+    private List<PromocaoItem> promocaoItemList;
 
     public Integer getId() {
         return id;
@@ -65,5 +69,29 @@ public class Produto {
 
     public void setValorUnitario(Float valorUnitario) {
         this.valorUnitario = valorUnitario;
+    }
+
+    public List<Categoria> getCategoriaList() {
+        return categoriaList;
+    }
+
+    public void setCategoriaList(List<Categoria> categoriaList) {
+        this.categoriaList = categoriaList;
+    }
+
+    public List<Promocao> getPromocaoList() {
+        return promocaoList;
+    }
+
+    public void setPromocaoList(List<Promocao> promocaoList) {
+        this.promocaoList = promocaoList;
+    }
+
+    public List<PromocaoItem> getPromocaoItemList() {
+        return promocaoItemList;
+    }
+
+    public void setPromocaoItemList(List<PromocaoItem> promocaoItemList) {
+        this.promocaoItemList = promocaoItemList;
     }
 }

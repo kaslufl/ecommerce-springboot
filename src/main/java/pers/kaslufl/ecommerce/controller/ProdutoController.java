@@ -39,7 +39,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public HashMap search(@PathVariable int id) {
+    public Produto search(@PathVariable int id) {
         try {
             return produtoRepository.search(id);
         }

@@ -6,6 +6,7 @@ import pers.kaslufl.ecommerce.model.entity.Produto;
 import pers.kaslufl.ecommerce.model.entity.Promocao;
 import pers.kaslufl.ecommerce.model.entity.PromocaoItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,72 +18,65 @@ public class ProdutoRepository {
     }
 
     public List<Produto> search () {
-        return jdbcTemplate.query(
+        List<Produto> produtoList = jdbcTemplate.query(
                 "select * from produto",
                 new ProdutoMapper()
         );
+
+        List<Produto> response = addProdutoRelationships(produtoList);
+        return  response;
     }
 
-    public HashMap search(int id) {
+    public Produto search(int id) {
         Produto produto = jdbcTemplate.queryForObject(
                 "select * from produto where id = ?",
                 new ProdutoMapper(),
                 id
         );
-        List<Categoria> categoria = jdbcTemplate.query(
-                "select c.* from categoria c inner join categoriaProduto cp on c.id = cp.categoriaid " +
-                        "inner join produto p on p.id = cp.produtoid where p.id = ?",
-                new CategoriaMapper(),
-                id
-        );
 
-        List<Promocao> promocao = jdbcTemplate.query(
-                "select pr.* from promocao pr inner join promocaoItem pi on pi.promocaoId = pr.id " +
-                        "inner join produto p on p.id = pi.produtoId where p.id = ?",
-                new PromocaoMapper(),
-                id
-        );
-
-        List<PromocaoItem> promocaoitem = jdbcTemplate.query(
-                "select pi.* from promocaoItem pi inner join produto p on p.id = pi.produtoid where p.id = ?",
-                new PromocaoItemMapper(),
-                id
-        );
-
-        HashMap json = new HashMap();
-        json.put("Produto", produto);
-        json.put("Categoria", categoria);
-        json.put("Promocao", promocao);
-        json.put("PromocaoItem", promocaoitem);
-
-        return json;
+        Produto response = addProductRelationships(produto);
+        return response;
     }
 
     public List<Produto> search (String nome) {
-        return jdbcTemplate.query(
-                "select * from produto where nome = ?",
+        List<Produto> produtoList = jdbcTemplate.query(
+                "select * from produto where nome like ?",
                 new ProdutoMapper(),
-                nome
+                "%" + nome + "%"
         );
+        List<Produto> response = addProdutoRelationships(produtoList);
+        return  response;
     }
 
     public List<Produto> search (Float valorMinimo, Float valorMaximo) {
-        return jdbcTemplate.query(
+        List<Produto> produtoList = jdbcTemplate.query(
                 "select * from produto where valorunitario between ? and ?",
                 new ProdutoMapper(),
                 valorMinimo,
                 valorMaximo
         );
+        List<Produto> response = addProdutoRelationships(produtoList);
+        return  response;
     }
 
     public List<Produto> search (String nome, Float valorMinimo, Float valorMaximo) {
-        return jdbcTemplate.query(
-                "select * from produto where nome = ? and valorUnitario between ? and ?",
+        List<Produto> produtoList = jdbcTemplate.query(
+                "select * from produto where nome like ? and valorUnitario between ? and ?",
                 new ProdutoMapper(),
-                nome,
+                "%" + nome + "%",
                 valorMinimo,
                 valorMaximo
         );
+        List<Produto> response = addProdutoRelationships(produtoList);
+        return  response;
+    }
+
+    public List<Produto> addProdutoRelationships(List<Produto> produtoList){
+        List<Produto> response = new ArrayList<>();
+        for(Produto produto: produtoList) {
+            response.add(addProductRelationships(produto));
+        }
+        return response;
     }
 
     public Produto create(Produto produto) throws Exception {
@@ -101,10 +95,47 @@ public class ProdutoRepository {
                     "select max(id) from produto",
                     Integer.class
             );
+
+            for(Categoria categoria : produto.getCategoriaList()){
+                jdbcTemplate.update(
+                        "insert into categoriaProduto(categoriaId, produtoId) values (?, ?)",
+                        categoria.getId(),
+                        id
+                );
+            }
             produto.setId(id);
-            return produto;
+            Produto response = addProductRelationships(produto);
+            return response;
         }
         throw new Exception("Produto não foi cadastrado!");
+    }
+
+    public Produto addProductRelationships(Produto produto) {
+        List<Categoria> categoriaList = jdbcTemplate.query(
+                "select c.* from categoria c inner join categoriaProduto cp on c.id = cp.categoriaid " +
+                        "inner join produto p on p.id = cp.produtoid where p.id = ?",
+                new CategoriaMapper(),
+                produto.getId()
+        );
+
+        List<Promocao> promocaoList = jdbcTemplate.query(
+                "select pr.* from promocao pr inner join promocaoItem pi on pi.promocaoId = pr.id " +
+                        "inner join produto p on p.id = pi.produtoId where p.id = ?",
+                new PromocaoMapper(),
+                produto.getId()
+        );
+
+        List<PromocaoItem> promocaoItemList = jdbcTemplate.query(
+                "select pi.* from promocaoItem pi inner join produto p on p.id = pi.produtoid where p.id = ?",
+                new PromocaoItemMapper(),
+                produto.getId()
+        );
+
+        produto.setCategoriaList(categoriaList);
+        produto.setPromocaoList(promocaoList);
+        produto.setPromocaoItemList(promocaoItemList);
+
+        return produto;
     }
 
     public Produto update(Produto produto) {
@@ -122,7 +153,8 @@ public class ProdutoRepository {
         if( update == 1 ) {
             System.out.println("Produto:(ID - "+ produto.getId() + " ) " + produto.getNome() + " foi atualizado!");
         }
-        return produto;
+        Produto response = addProductRelationships(produto);
+        return response;
     }
 
     public void delete(int id) {
