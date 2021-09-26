@@ -3,14 +3,19 @@ package pers.kaslufl.ecommerce.model.repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import pers.kaslufl.ecommerce.model.entity.Categoria;
 import pers.kaslufl.ecommerce.model.entity.Produto;
+import pers.kaslufl.ecommerce.model.entity.Promocao;
+import pers.kaslufl.ecommerce.model.entity.PromocaoItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaRepository {
-    private JdbcTemplate jdbcTemplate;;
+    private JdbcTemplate jdbcTemplate;
+    private ProdutoRepository produtoRepository;
 
     public CategoriaRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.produtoRepository = new ProdutoRepository(jdbcTemplate);
     }
 
     public List<Categoria> search(){
@@ -29,26 +34,30 @@ public class CategoriaRepository {
     }
 
     public List<Produto> searchProducts(int id) {
-        return jdbcTemplate.query(
+        List<Produto> produtoList = jdbcTemplate.query(
                 "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ?",
                 new ProdutoMapper(),
                 id
         );
+        List<Produto> response = produtoRepository.addProdutoRelationships(produtoList);
+        return response;
     }
 
     public List<Produto> searchProducts(int id, String nome) {
-        return jdbcTemplate.query(
+        List<Produto> produtoList = jdbcTemplate.query(
                 "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome like ?",
                 new ProdutoMapper(),
                 id,
                 "%" + nome + "%"
         );
+        List<Produto> response = produtoRepository.addProdutoRelationships(produtoList);
+        return response;
     }
 
     public List<Produto> searchProducts(int id, Float valorMinimo, Float valorMaximo) {
-        return jdbcTemplate.query(
+        List<Produto> produtoList = jdbcTemplate.query(
                 "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ? " +
                         "and p.valorunitario between ? and ?",
@@ -57,10 +66,12 @@ public class CategoriaRepository {
                 valorMinimo,
                 valorMaximo
         );
+        List<Produto> response = produtoRepository.addProdutoRelationships(produtoList);
+        return response;
     }
 
     public List<Produto> searchProducts(int id, String nome, Float valorMinimo, Float valorMaximo) {
-        return jdbcTemplate.query(
+        List<Produto> produtoList = jdbcTemplate.query(
                 "select p.* from produto p inner join categoriaproduto cp on cp.produtoid = p.id " +
                         "inner join categoria c on c.id = cp.categoriaid where c.id = ? and p.nome like ?" +
                         "and p.valorunitario between ? and ?",
@@ -70,6 +81,8 @@ public class CategoriaRepository {
                 valorMinimo,
                 valorMaximo
         );
+        List<Produto> response = produtoRepository.addProdutoRelationships(produtoList);
+        return response;
     }
 
     public Categoria create(Categoria categoria) throws Exception {

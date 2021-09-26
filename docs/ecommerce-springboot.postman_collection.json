@@ -39,7 +39,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{url_server}}/produto?nome=Refrigereco&valorMinimo=2&valorMaximo=6",
+							"raw": "http://{{url_server}}/produto?nome=Co",
 							"protocol": "http",
 							"host": [
 								"{{url_server}}"
@@ -50,18 +50,20 @@
 							"query": [
 								{
 									"key": "nome",
-									"value": "Refrigereco",
+									"value": "Co",
 									"description": "string"
 								},
 								{
 									"key": "valorMinimo",
 									"value": "2",
-									"description": "float"
+									"description": "float",
+									"disabled": true
 								},
 								{
 									"key": "valorMaximo",
 									"value": "6",
-									"description": "float"
+									"description": "float",
+									"disabled": true
 								}
 							]
 						}
@@ -75,7 +77,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"Refrigereco\",\r\n    \"descricao\": \"Refrigereco de qualidade 500ml\",\r\n    \"valorUnitario\": 1\r\n}",
+							"raw": "{\r\n    \"nome\": \"Coca\",\r\n    \"descricao\": \"Refrigereco de qualidade 500ml\",\r\n    \"valorUnitario\": 1,\r\n    \"categoriaList\": [\r\n        {\r\n            \"id\": 1\r\n        },\r\n        {\r\n            \"id\": 2\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -106,7 +108,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{url_server}}/categoria/:categoriaId/produto",
+							"raw": "http://{{url_server}}/categoria/:categoriaId/produto?nome=Refri&valorMinimo=1&valorMaximo=3",
 							"protocol": "http",
 							"host": [
 								"{{url_server}}"
@@ -119,21 +121,18 @@
 							"query": [
 								{
 									"key": "nome",
-									"value": "Refrigereco",
-									"description": "string",
-									"disabled": true
+									"value": "Refri",
+									"description": "string"
 								},
 								{
 									"key": "valorMinimo",
 									"value": "1",
-									"description": "float",
-									"disabled": true
+									"description": "float"
 								},
 								{
 									"key": "valorMaximo",
 									"value": "3",
-									"description": "float",
-									"disabled": true
+									"description": "float"
 								}
 							],
 							"variable": [

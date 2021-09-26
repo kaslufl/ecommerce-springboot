@@ -7,7 +7,6 @@ import pers.kaslufl.ecommerce.model.entity.Promocao;
 import pers.kaslufl.ecommerce.model.entity.PromocaoItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ProdutoRepository {

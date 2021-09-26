@@ -11,7 +11,6 @@ import pers.kaslufl.ecommerce.model.repository.ProdutoNotFoundException;
 import pers.kaslufl.ecommerce.model.repository.ProdutoRepository;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
